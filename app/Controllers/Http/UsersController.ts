@@ -27,8 +27,16 @@ export default class UsersController {
     return response.status(200).json({ apiToken })
   }
 
-  public async update({ params, request, response }: HttpContextContract) {
+  public async update({ params, request, response, auth }: HttpContextContract) {
     const user = await User.findOrFail(params.id)
+
+    const authId = auth.user?.id
+    if (!authId) {
+      return response.status(401).json({ message: 'Unauthorized' })
+    }
+    if (user.id !== authId) {
+      return response.status(403).json({ message: 'Forbidden' })
+    }
 
     user.email = request.input('email')
     user.password = request.input('password')
@@ -40,8 +48,17 @@ export default class UsersController {
     return response.status(200).json({ message: 'User details updated successfully' })
   }
 
-  public async destroy({ params, response }: HttpContextContract) {
+  public async destroy({ params, response, auth }: HttpContextContract) {
     const user = await User.findOrFail(params.id)
+
+    const authId = auth.user?.id
+    if (!authId) {
+      return response.status(401).json({ message: 'Unauthorized' })
+    }
+    if (user.id !== authId) {
+      return response.status(403).json({ message: 'Forbidden' })
+    }
+
     await user.delete()
 
     return response.status(200).json({ message: 'User deleted successfully' })
