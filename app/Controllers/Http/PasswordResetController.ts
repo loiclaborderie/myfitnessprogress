@@ -4,6 +4,7 @@ import { schema, rules } from '@ioc:Adonis/Core/Validator'
 import Token from 'App/Models/Token'
 import User from 'App/Models/User'
 import Mail from '@ioc:Adonis/Addons/Mail'
+import auth from 'Config/auth'
 
 export default class PasswordResetController {
   public async send({ request, response }: HttpContextContract) {
@@ -15,11 +16,10 @@ export default class PasswordResetController {
     const token = await Token.generatePasswordResetToken(user)
     console.log(user, token)
     if (user) {
-      console.log('sending email')
-      const mailSent = await Mail.send((message) => {
+      await Mail.send((message) => {
         message
-          .from('l.laborderie-boulou@tbs-education.org')
-          .to('66labetedesexe@gmail.com')
+          .from(Env.get('SMTP_USERNAME'))
+          .to(user.email)
           .subject('Reset your password')
           .html(
             `Reset your password by <a href="${Env.get(
@@ -27,11 +27,8 @@ export default class PasswordResetController {
             )}/reset-password/${token}">clicking here</a>.`
           )
       })
-      console.log(mailSent)
     }
-    return response
-      .status(200)
-      .send({ message: user ? 'Password reset link sent' : 'User not found' })
+    return response.status(200).send({ message: 'Password reset link sent' })
   }
   public async reset({ response, params }: HttpContextContract) {
     const token = params.token
@@ -40,10 +37,10 @@ export default class PasswordResetController {
     if (!isValid) {
       return response.status(400).send({ message: 'Invalid token' })
     }
-    return response.status(200).send({ token })
+    return response.status(200).send({ message: 'Valid token' })
   }
 
-  public async store({ request, response }: HttpContextContract) {
+  public async store({ request, response, auth }: HttpContextContract) {
     const passwordSchema = schema.create({
       token: schema.string(),
       password: schema.string({}, [rules.minLength(8)]),
@@ -54,6 +51,8 @@ export default class PasswordResetController {
       return response.status(400).send({ message: 'Invalid token' })
     }
     await user.merge({ password }).save()
+    await auth.login(user)
+    await Token.expirePasswordResetToken(user)
     response.status(200).send({ message: 'Password updated' })
   }
 }
