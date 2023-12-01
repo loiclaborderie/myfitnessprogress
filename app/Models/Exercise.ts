@@ -1,4 +1,5 @@
 import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
+import { ExerciseDifficulty, ExerciseType } from 'App/types/exerciseEnums'
 
 export default class Exercise extends BaseModel {
   @column({ isPrimary: true })
@@ -17,20 +18,10 @@ export default class Exercise extends BaseModel {
   public videoUrl: string | null
 
   @column()
-  public difficulty: 'beginner' | 'intermediate' | 'advanced' | 'expert'
+  public difficulty: ExerciseDifficulty
 
   @column()
-  public type:
-    | 'warmup'
-    | 'stretch'
-    | 'volume'
-    | 'cooldown'
-    | 'cardio'
-    | 'strength'
-    | 'power'
-    | 'plyometric'
-    | 'other'
-    | 'any'
+  public type: ExerciseType
 
   @column()
   public instructions: string | null

@@ -31,3 +31,12 @@ Route.post('/reset-password', 'PasswordResetController.store')
 Route.post('/login', 'UsersController.login')
 Route.put('/users/:id', 'UsersController.update').middleware('auth')
 Route.delete('/users/:id', 'UsersController.destroy').middleware('auth')
+
+
+Route.group(() => {
+  Route.get('/', 'ExercisesController.index')
+  Route.get('/:id', 'ExercisesController.show')
+  Route.post('/', 'ExercisesController.store')
+  Route.put('/:id', 'ExercisesController.update')
+  Route.delete('/:id', 'ExercisesController.destroy')
+}).prefix('/exercise')
