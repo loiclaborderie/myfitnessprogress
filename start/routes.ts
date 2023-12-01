@@ -25,6 +25,8 @@ Route.get('/', async () => {
 }).middleware('auth')
 
 Route.post('/register', 'UsersController.register')
+Route.post('/forgot-password', 'PasswordResetController.send')
+Route.post('/reset-password/:token', 'PasswordResetController.reset')
 Route.post('/login', 'UsersController.login')
 Route.put('/users/:id', 'UsersController.update').middleware('auth')
 Route.delete('/users/:id', 'UsersController.destroy').middleware('auth')
