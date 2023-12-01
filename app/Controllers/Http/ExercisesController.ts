@@ -10,7 +10,8 @@ const exerciseSchema = schema.create({
     videoUrl: schema.string.optional(),
     difficulty: schema.enum(Object.values(ExerciseDifficulty)),
     type: schema.enum.optional(Object.values(ExerciseType)),
-    instructions: schema.string.optional()
+    instructions: schema.string.optional(),
+    muscleGroups: schema.array.optional().members(schema.number())
 })
 
 export default class ExercisesController {
@@ -20,8 +21,15 @@ export default class ExercisesController {
     }
     
     public async store({request, response}: HttpContextContract) {
-        const exercise = await request.validate({schema: exerciseSchema})
-        const newExercise = await Exercise.create(exercise)
+        const exercisePayload = await request.validate({schema: exerciseSchema})
+        const { muscleGroups, ...exerciseData } = exercisePayload
+        
+        const newExercise = await Exercise.create(exerciseData)
+
+        if (muscleGroups && muscleGroups.length > 0) {
+            await newExercise.related('muscleGroups').attach(muscleGroups)
+        }
+
         return response.status(201).json({newExercise})
     }
     
