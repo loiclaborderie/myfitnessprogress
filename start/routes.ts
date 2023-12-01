@@ -22,7 +22,7 @@ import Route from '@ioc:Adonis/Core/Route'
 
 Route.get('/', async () => {
   return { hello: 'world' }
-}).middleware('auth')
+})
 
 Route.post('/register', 'UsersController.register')
 Route.post('/forgot-password', 'PasswordResetController.send')
@@ -36,7 +36,15 @@ Route.delete('/users/:id', 'UsersController.destroy').middleware('auth')
 Route.group(() => {
   Route.get('/', 'ExercisesController.index')
   Route.get('/:id', 'ExercisesController.show')
-  Route.post('/', 'ExercisesController.store')
-  Route.put('/:id', 'ExercisesController.update')
-  Route.delete('/:id', 'ExercisesController.destroy')
+  Route.post('/', 'ExercisesController.store').middleware('auth')
+  Route.put('/:id', 'ExercisesController.update').middleware('auth')
+  Route.delete('/:id', 'ExercisesController.destroy').middleware('auth')
 }).prefix('/exercise')
+
+Route.group(() => {
+  Route.get('/', 'MuscleGroupsController.index')
+  Route.get('/:id', 'MuscleGroupsController.show')
+  Route.post('/', 'MuscleGroupsController.store').middleware('auth')
+  Route.put('/:id', 'MuscleGroupsController.update').middleware('auth')
+  Route.delete('/:id', 'MuscleGroupsController.destroy').middleware('auth')
+}).prefix('/muscle-group')

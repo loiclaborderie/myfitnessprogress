@@ -6,7 +6,7 @@ export default class MuscleGroup extends BaseModel {
   public id: number
 
   @column()
-  public muscleGroup: string
+  public name: string
 
   @column()
   public imageUrl: string | null
