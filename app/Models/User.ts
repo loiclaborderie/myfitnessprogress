@@ -2,6 +2,7 @@ import { DateTime } from 'luxon'
 import { BaseModel, HasMany, beforeSave, column, hasMany } from '@ioc:Adonis/Lucid/Orm'
 import Hash from '@ioc:Adonis/Core/Hash'
 import Token from './Token'
+import Exercise from './Exercise'
 
 export default class User extends BaseModel {
   @column({ isPrimary: true })
@@ -27,6 +28,9 @@ export default class User extends BaseModel {
 
   @hasMany(() => Token)
   public tokens: HasMany<typeof Token>
+
+  @hasMany(() => Exercise)
+  public exercises: HasMany<typeof Exercise>
 
   @hasMany(() => Token, {
     onQuery: (query) => {
