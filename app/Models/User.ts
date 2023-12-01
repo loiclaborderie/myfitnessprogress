@@ -1,6 +1,5 @@
 import { DateTime } from 'luxon'
 import { BaseModel, HasMany, beforeSave, column, hasMany } from '@ioc:Adonis/Lucid/Orm'
-import { BaseModel, HasMany, beforeSave, column, hasMany } from '@ioc:Adonis/Lucid/Orm'
 import Hash from '@ioc:Adonis/Core/Hash'
 import Token from './Token'
 import Exercise from './Exercise'

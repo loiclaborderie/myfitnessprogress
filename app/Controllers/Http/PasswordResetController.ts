@@ -4,7 +4,6 @@ import { schema, rules } from '@ioc:Adonis/Core/Validator'
 import Token from 'App/Models/Token'
 import User from 'App/Models/User'
 import Mail from '@ioc:Adonis/Addons/Mail'
-import auth from 'Config/auth'
 
 export default class PasswordResetController {
   public async send({ request, response }: HttpContextContract) {
