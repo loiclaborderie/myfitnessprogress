@@ -1,5 +1,6 @@
-import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, ManyToMany, column, manyToMany } from '@ioc:Adonis/Lucid/Orm'
 import { ExerciseDifficulty, ExerciseType } from 'App/types/exerciseEnums'
+import MuscleGroup from './MuscleGroup'
 
 export default class Exercise extends BaseModel {
   @column({ isPrimary: true })
@@ -26,8 +27,8 @@ export default class Exercise extends BaseModel {
   @column()
   public instructions: string | null
 
-  // @manyToMany(() => MuscleGroup)
-  // public muscleGroups: ManyToMany<typeof MuscleGroup>
+  @manyToMany(() => MuscleGroup)
+  public muscleGroups: ManyToMany<typeof MuscleGroup>
 
   // @manyToMany(() => Category)
   // public categories: ManyToMany<typeof Categories>
