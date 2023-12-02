@@ -38,7 +38,7 @@ Route.delete('/users/:id', 'UsersController.destroy').middleware('auth')
 Route.group(() => {
   Route.get('/', 'ExercisesController.index')
   Route.get('/:id', 'ExercisesController.show')
-  Route.get('/byMuscle/:id', 'ExercisesController.getExercisesByMuscleGroup')
+  Route.get('/muscle/:id', 'ExercisesController.getExercisesByMuscleGroup')
   Route.get('/category/:id', 'ExercisesController.getExercisesByCategory')
   Route.post('/', 'ExercisesController.store').middleware('auth')
   Route.put('/:id', 'ExercisesController.update').middleware('auth')
@@ -52,3 +52,11 @@ Route.group(() => {
   Route.put('/:id', 'MuscleGroupsController.update').middleware('auth')
   Route.delete('/:id', 'MuscleGroupsController.destroy').middleware('auth')
 }).prefix('/muscle-group')
+
+Route.group(() => {
+  Route.get('/', 'CategoriesController.index')
+  Route.get('/:id', 'CategoriesController.show')
+  Route.post('/', 'CategoriesController.store').middleware('auth')
+  Route.put('/:id', 'CategoriesController.update').middleware('auth')
+  Route.delete('/:id', 'CategoriesController.destroy').middleware('auth')
+}).prefix('/category')
