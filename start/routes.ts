@@ -19,11 +19,13 @@
 */
 
 import Route from '@ioc:Adonis/Core/Route'
+import {seedRoute} from './seedRoute'
 
 Route.get('/', async () => {
-  return { hello: 'world' }
+ return { hello: 'world' }
 })
 
+seedRoute()
 Route.post('/register', 'UsersController.register')
 Route.post('/forgot-password', 'PasswordResetController.send')
 Route.get('/reset-password/:token', 'PasswordResetController.reset')
@@ -36,6 +38,8 @@ Route.delete('/users/:id', 'UsersController.destroy').middleware('auth')
 Route.group(() => {
   Route.get('/', 'ExercisesController.index')
   Route.get('/:id', 'ExercisesController.show')
+  Route.get('/byMuscle/:id', 'ExercisesController.getExercisesByMuscleGroup')
+  Route.get('/category/:id', 'ExercisesController.getExercisesByCategory')
   Route.post('/', 'ExercisesController.store').middleware('auth')
   Route.put('/:id', 'ExercisesController.update').middleware('auth')
   Route.delete('/:id', 'ExercisesController.destroy').middleware('auth')
