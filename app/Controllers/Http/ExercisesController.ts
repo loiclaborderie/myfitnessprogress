@@ -1,6 +1,6 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { schema } from '@ioc:Adonis/Core/Validator'
-import { ExerciseDifficulty, ExerciseType } from 'App/types/exerciseEnums';
+import { ExerciseDifficulty } from 'App/types/exerciseEnums';
 import Exercise from 'App/Models/Exercise'
 
 const exerciseSchema = schema.create({
@@ -9,14 +9,28 @@ const exerciseSchema = schema.create({
     imageUrl: schema.string.optional(),
     videoUrl: schema.string.optional(),
     difficulty: schema.enum(Object.values(ExerciseDifficulty)),
-    type: schema.enum.optional(Object.values(ExerciseType)),
     instructions: schema.string.optional(),
-    muscleGroups: schema.array.optional().members(schema.number())
+    muscleGroups: schema.array.optional().members(schema.number()),
+    categoryId: schema.number()
 })
 
 export default class ExercisesController {
     public async index({response}: HttpContextContract) {
         const exercises = await Exercise.all()
+        return response.status(200).json({exercises})
+    }
+
+    public async getExercisesByMuscleGroup({params, response}: HttpContextContract) {
+        const muscleGroupId = params.id
+        const exercises = await Exercise.query().whereHas('muscleGroups', (query) => {
+            query.where('muscle_groups.id', muscleGroupId)
+        }).preload('muscleGroups')
+        return response.status(200).json({exercises})
+    }
+
+    public async getExercisesByCategory({params, response}: HttpContextContract) {
+        const categoryId = params.id
+        const exercises = await Exercise.query().where('category_id', categoryId).preload('muscleGroups')
         return response.status(200).json({exercises})
     }
     
