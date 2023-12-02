@@ -8,11 +8,11 @@ export default class extends BaseSchema {
       table.increments('id')
       table.string('name', 255).notNullable()
       table.string('description', 255).notNullable()
-      table.string('imageUrl', 255).nullable()
-      table.string('videoUrl', 255).nullable()
+      table.string('image_url', 255).nullable()
+      table.string('video_url', 255).nullable()
       table.string('difficulty', 255).notNullable()
-      table.string('type', 255).notNullable().defaultTo('any')
       table.string('instructions', 255).nullable()
+      table.integer('category_id').unsigned().references('categories.id').onDelete('CASCADE')
     })
   }
 
